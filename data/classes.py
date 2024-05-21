@@ -7,6 +7,39 @@ import pickle
 class PhoneNotFindError(Exception):
     pass
 
+class Field:
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return str(self.value)
+
+class Name(Field):
+    def __init__(self, value):
+        self.value = value
+
+class Birthday(Field):
+    def __init__(self, date=None):
+            result = re.findall(r'\d\d.\d\d.\d\d\d\d', date)
+            if result != []:
+                self.value = datetime.date(year=int(date[6:10]), month=int(date[3:5]), day=int(date[0:2]))
+            else:
+                raise DateFormatError
+
+    def __str__(self) -> str:
+        return 'No Data' if self.value == None else self.value.strftime('%d.%m.%Y')
+    
+class Phone(Field):
+    MAX_PHONE_LEN = 10
+
+    def __init__(self, value):
+        self.value = value
+
+class Email(Field):
+    def __init__(self, value):
+        self.value = value
+
+
 class AddressBook(UserDict):
     def __init__(self):
         """
@@ -82,7 +115,7 @@ class Note:
         if new_tag:
             self.tags.append(tag)
     
-    # Видалення тега з запису
+    # Видалити тег з запису
     def remove_tag(self, tag):
         find_tag = False
         for t in self.tags:
