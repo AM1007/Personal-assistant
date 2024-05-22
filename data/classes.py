@@ -2,6 +2,7 @@ from collections import UserDict
 import re
 import datetime
 import pickle
+from record import Record
 
 # Обробка випадку, коли номер телефону не знайдено у записі
 class PhoneNotFindError(Exception):
@@ -46,7 +47,7 @@ class AddressBook(UserDict):
         Ініціалізія AddressBook із лічильником ID користувачів та словником даних.
         """
         self.user_id_counter = 0
-        self.data = UserDict()
+        self.data: dict[int, Record] = UserDict()
 
     # Завантажити адресну книгу з файлу
     def read_from_file(self):
@@ -64,7 +65,7 @@ class AddressBook(UserDict):
         with open('data\\abook.dat', 'wb') as fh:
             pickle.dump(self, fh)
     
-    def add_record(self, record):
+    def add_record(self, record: Record):
         """
         Додавання нового запису до AddressBook.
 
@@ -80,7 +81,7 @@ class AddressBook(UserDict):
         Args:
             args (list): Список, що містить ID запису та нове ім'я.
         """
-        self.data[int(args[0])].name.value = args[1]
+        self.data[int(args[0])].name = Name(args[1])
 
     def del_record(self, args):
         """
@@ -91,6 +92,23 @@ class AddressBook(UserDict):
         """
         self.data.pop(int(args[0]))
 
+    def add_phone(self, args):
+        """
+        Додавання номеру телефона контакту
+        """
+        self.data[int(args[0])].add_phone(args[1])
+
+    def edit_phone(self, args):
+        """
+        Зміна номеру телефона контакту
+        """
+        self.data[int(args[0])].edit_phone(args[1], args[1])   
+
+    def del_phone(self, args):
+        """
+        Видалення номеру телефона контакту
+        """
+        self.data[int(args[0])].remove_phone(args[1])   
 
 # class нотатки користувача
 class Note:
@@ -193,5 +211,3 @@ class NoteBook(UserDict):
             args (list): Список, що містить ID запису для видалення.
         """
         self.data.pop(int(args[0]))
-
-
