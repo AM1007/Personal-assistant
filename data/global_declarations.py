@@ -2,7 +2,7 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 from data.classes import AddressBook, NoteBook
 
-# You need to install the external package in the terminal first: pip install prompt_toolkit
+# Встановіть зоввнішню залежність: pip install prompt_toolkit
 commands = WordCompleter([
     "close", "exit", "hello", "add", "edit", "del", "address", "del-address",
     "add-phone", "edit-phone", "del-phone", "all", 
@@ -13,9 +13,10 @@ session = PromptSession(completer=commands)
 
 def exit_procedure(book:AddressBook, nbook:NoteBook):
     """
-    Saving AddressBook to file
-    Args:
-        book (AddressBook): An AddressBook instance containing contact information.
+    Збереження Адресної Книги в файл
+
+    Аргументи:
+        book (AddressBook): Екземпляр Адресної книги що містить інформацію про контакти
     """
     book.save_to_file()
     nbook.save_to_file()
@@ -36,7 +37,7 @@ def show_help():
                    ['del', '[Contact_id]', 'remove user [Contact_id] from adress book'],
                    ['add-phone', '[Contact_id] [Phone]', 'add to user [Contact_id] a [Phone]'],
                    ['edit-phone', '[Contact_id] [Phone] [new_Phone]', 'replace for user [Contact_id] a [Phone] by [new_Phone]'],
-                   ['del-phone', '[Name] [Phone]', 'remove phone [Phone] from user [Name]'],
+                   ['del-phone', '[Contact_id] [Phone]', 'remove phone [Phone] from user [Contact_id]'],
                    ['add-email', '[Contact_id] [Email]', 'add to user [Contact_id] an [Email]'],
                    ['edit-email', '[Contact_id] [Email] [new_Email]', 'replace for user [Contact_id] an [Email] by [new_Email]'],
                    ['del-email', '[Contact_id] [Email]', 'remove email [Email] from user [Contact_id]'],
@@ -62,6 +63,5 @@ def show_help():
 
     for i in commands:
         help_string += f'{i[0]:^14} | {i[1]:^32} | {i[2]:^12} \n'
-        #help_string += dashes
     
     print(help_string)
