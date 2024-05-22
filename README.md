@@ -34,6 +34,12 @@
    git clone https://github.com/AM1007/team-project_contacts-personal-asisstant.git
    ```
 
+2. Встановіть додаткові залежності:
+
+   ```
+   pip install prompt_toolkit
+   ```
+
 ## Використання
 
 1. Запустіть програму, запустивши файл main.py:
