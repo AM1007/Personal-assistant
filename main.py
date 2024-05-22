@@ -1,67 +1,128 @@
-from prompt_toolkit import PromptSession
-from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+from data.global_declarations import session, exit_procedure, parse_input, show_help
 from data.classes import AddressBook, NoteBook
 
-# Встановіть зовнішній пакет prompt_toolkit: pip install prompt_toolkit
-commands = WordCompleter([
-    "close", "exit", "hello", "add", "edit", "del", "address", "del-address",
-    "add-phone", "edit-phone", "del-phone", "all", 
-    "add-email", "edit-email", "del-email", "find",
-    "birthday", "del-birthday", "next-birthdays", "note", "help", "sort-tag",
-    "edit-note", "all-notes", "del-note", "add-tag", "del-tag", "find-notes", "find-tag"], ignore_case=True)
-session = PromptSession(completer=commands)
+from data.address_book_functions import (   upcoming_birthdays, add_email_in_rec, edit_email_in_rec, del_email_in_rec, 
+                                            birthday_record, del_birthday, address_record, del_address, 
+                                            add_record, edit_record, del_record, add_phone_in_rec, edit_phone_in_rec, del_phone_in_rec,
+                                            find_in_records  )
 
-def exit_procedure(book:AddressBook, nbook:NoteBook):
-    """
-    Збереження AddressBook в файл
-    Args:
-        book (AddressBook): Екземпляр AddressBook що містить інформацію про контакти.
-    """
-    book.save_to_file()
-    nbook.save_to_file()
-    print('Good bye!')
+from data.notebook_functions import find_in_notes, find_in_tags, sort_by_tags, add_note, edit_note, del_note, add_tag, del_tag
 
-# Ввод команд з терміналу
-def parse_input(user_input):
-    cmd, *args = user_input.split()
-    cmd = cmd.strip().lower()
-    return cmd, *args
 
-# Допомічник (help)
-def show_help():
-    commands = [['Command', 'Parameters', 'Description'],
-                   ['all', '', 'list all information about users'],
-                   ['add', '[Name]', 'create new user [Name] in adress book'], 
-                   ['edit', '[Contact_id] [new_Name]', 'edit name of [Contact_id] to [new_Name]'],
-                   ['del', '[Contact_id]', 'remove user [Contact_id] from adress book'],
-                   ['add-phone', '[Contact_id] [Phone]', 'add to user [Contact_id] a [Phone]'],
-                   ['edit-phone', '[Contact_id] [Phone] [new_Phone]', 'replace for user [Contact_id] a [Phone] by [new_Phone]'],
-                   ['del-phone', '[Name] [Phone]', 'remove phone [Phone] from user [Name]'],
-                   ['add-email', '[Contact_id] [Email]', 'add to user [Contact_id] an [Email]'],
-                   ['edit-email', '[Contact_id] [Email] [new_Email]', 'replace for user [Contact_id] an [Email] by [new_Email]'],
-                   ['del-email', '[Contact_id] [Email]', 'remove email [Email] from user [Contact_id]'],
-                   ['address', '[Contact_id] [Address]', 'set for user [Name] an address [Address]'],
-                   ['del-address', '[Contact_id]', 'remove address from [Contact_id]'],
-                   ['birthday', '[Contact_id] [Birthday]', 'set for user [Contact_id] a birthday at [Birthday]'],
-                   ['del-birthday', '[Contact_id]', 'remove birthday from [Contact_id]'],
-                   ['find', '[search]', 'list [search] data in Name, Phones, Address, Emails, Birthdays. [search] must be 2 symbols min'],
-                   ['next-birthdays', '[int]', 'shows upcoming birthdays if exist in period from today till [int] days'],
-                   ['note', '', 'Add a note to Note Book'],
-                   ['all-notes', '', 'list all notes'],
-                   ['edit-note', '[Note_id] [Note]', 'edit text of [Note_id] Note'],
-                   ['del-note', '[Note_id]', 'Remove [Note_id] note from Note Book'],
-                   ['add-tag', '[Note_id] [Tag]', 'add [Tag] to note [Note_id]'],
-                   ['del-tag', '[Note_id] [Tag]', 'remove [Tag] from note [Note_id]'],
-                   ['find-notes', '[searchstring]', 'list all Notes with [searchstring] data in note and tags.[searchstring] must be 2 symbols minimum'],
-                   ['find-tags', '[searchstring]', 'list all Notes with [searchstring] data in tags.[searchstring] must be 2 symbols minimum'],
-                   ['sort-tag', '', 'list all Notes sorted by number of tags'],
-                   ['close, exit', '', 'exit the bot'],
-                   ['help', '', 'list all bot commands']]
-    dashes = "{0:<14} + {1:<32} + {2:^12} \n".format("-" * 14, "-" * 32, "-" * 12)
-    help_string = ''
+def main():
 
-    for i in commands:
-        help_string += f'{i[0]:^14} | {i[1]:^32} | {i[2]:^12} \n'
-        #help_string += dashes
+    print('Welcome to the assistant bot!')
+    print('Type "help" to see all commands list and descriptions')
+
+    # Завантаження AddressBook з файлу 'abook.dat'. Створення нової порожньої Адресної Книги в разі, якщо файл відсутній
+    try:
+        book = AddressBook().read_from_file()
+    except:
+        book = AddressBook()
+
+    # Завантаження NoteBook з файлу 'nbook.dat'. Створення нового порожнього Блокноту в разі, якщо файл відсутній
+    try:
+        nbook = NoteBook().read_from_file()
+    except:
+        nbook = NoteBook()
     
-    print(help_string)
+    while True:
+        user_input = session.prompt("Enter a command: ", auto_suggest=AutoSuggestFromHistory(), complete_while_typing=False)
+        if user_input:
+            command, *args = parse_input(user_input)
+            
+            if command in ['close', 'exit']:
+                exit_procedure(book, nbook)
+                break
+
+            elif command == 'hello':
+                print('How can I help you?')
+
+            elif command == 'add':
+                add_record(book, args)
+
+            elif command == 'edit':
+                edit_record(book, args)
+
+            elif command == 'del':
+                del_record(book, args)
+
+            elif command == 'add-phone':
+                add_phone_in_rec(book, args)
+            
+            elif command == 'edit-phone':
+                edit_phone_in_rec(book, args)
+
+            elif command == 'del-phone':
+                del_phone_in_rec(book, args)
+
+            elif command == 'add-email':
+                add_email_in_rec(book, args)
+            
+            elif command == 'edit-email':
+                edit_email_in_rec(book, args)
+
+            elif command == 'del-email':
+                del_email_in_rec(book, args)
+
+            elif command == 'birthday':
+                birthday_record(book, args)
+
+            elif command == 'del-birthday':
+                del_birthday(book, args)
+
+            elif command == 'address':
+                address_record(book, args)
+
+            elif command == 'del-address':
+                del_address(book, args)
+
+            elif command == 'find':
+                find_in_records(book, args)
+
+            elif command == 'find-notes':
+                find_in_notes(nbook, args)
+
+            elif command == 'find-tag':
+                find_in_tags(nbook, args)
+
+            elif command == 'sort-tag':
+                sort_by_tags(nbook, args)
+
+            elif command == 'help':
+                show_help()
+
+            elif command == 'note':
+                add_note(nbook, args)
+
+            elif command == 'edit-note':
+                edit_note(nbook, args)
+
+            elif command == 'del-note':
+                del_note(nbook, args)
+
+            elif command == 'add-tag':
+                add_tag(nbook, args)
+
+            elif command == 'del-tag':
+                del_tag(nbook, args)
+
+            elif command == 'all-notes':
+                for _, note in nbook.data.items():
+                    print(note)
+
+            elif command == 'next-birthdays':
+                birthdays = upcoming_birthdays(book, args)
+                if birthdays:
+                    for contact in birthdays:
+                        print(contact)
+                
+            elif command == 'all':
+                for _, record in book.data.items():
+                    print(record)
+            else:
+                print('Error: Invalid command.')
+
+if __name__ == '__main__':
+    main()

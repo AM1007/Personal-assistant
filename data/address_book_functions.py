@@ -44,11 +44,12 @@ def upcoming_birthdays(book, args):
 
 def birthday_record(book:AddressBook, args:list):
     """
-    Додавання дня народження для запису в адресну книгу
+    Додавання дня народження дo запису в адресну книгу
+
     Аргументи:
-        book (AddressBook): Екземпляр AddressBook, що містить інформацію про контакти.
-        user_id (int): Ідентифікатор користувача в адресній книзі.
-        birthday (Birthday): День народження користувача. 
+        book (AddressBook): Екземпляр AddressBook, що містить інформацію про контакти
+        user_id (int): Ідентифікатор користувача в адресній книзі
+        birthday (Birthday): День народження користувача
     """
     if len(args) ==2:
         try:
@@ -66,9 +67,10 @@ def birthday_record(book:AddressBook, args:list):
 def del_birthday(book:AddressBook, args:list):
     """
     Видалення дня народження з запису в адресній книзі
+
     Аргументи:
-        book (AddressBook): Екземпляр AddressBook, що містить інформацію про контакти.
-        user_id (int): Ідентифікатор користувача в адресній книзі.
+        book (AddressBook): Екземпляр AddressBook, що містить інформацію про контакти
+        user_id (int): Ідентифікатор користувача в адресній книзі
     """
     if len(args) ==1:
         if int(args[0]) in book.data:
@@ -82,11 +84,12 @@ def del_birthday(book:AddressBook, args:list):
 
 def address_record(book:AddressBook, args:list):
     """
-    Додати адресу до запису в AddressBook
-    Args:
+    Додавання адреси до запису в AddressBook
+
+    Аргументи:
         book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію.
         user id (int): ID користувача в AddressBook
-        address (str): адреса користувача 
+        address (str): Адреса користувача 
     """
     if len(args) >=2:
         if int(args[0]) in book.data:
@@ -100,8 +103,9 @@ def address_record(book:AddressBook, args:list):
 
 def del_address(book:AddressBook, args:list):
     """
-    Видалення адресу з запису в AddressBook
-    Args:
+    Видалення адреси із запису в AddressBook
+
+    Аргументи:
         book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію.
         user id (int): ID користувача в AddressBook
     """
@@ -117,11 +121,12 @@ def del_address(book:AddressBook, args:list):
 
 def add_email_in_rec(book:AddressBook, args:list):
     """
-    Додати електронну пошту до запису в AddressBook
-    Args:
-        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію.
+    Додання електронної пошти до запису в AddressBook
+
+    Аргументи:
+        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію
         user id (int): ID користувача в AddressBook
-        email (Email): електронна пошта користувача 
+        email (Email): Електронна пошта користувача 
     """
     if len(args) ==2:
         try:
@@ -138,8 +143,9 @@ def add_email_in_rec(book:AddressBook, args:list):
 
 def edit_email_in_rec(book:AddressBook, args:list):
     """
-    Редагувати електронну пошту для запису в AddressBook
-    Args:
+    Редагування електронної пошти для запису в AddressBook
+
+    Аргументи:
         book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію.
         user id (int): ID користувача в AddressBook
         email (Email): електронна пошта користувача 
@@ -160,8 +166,9 @@ def edit_email_in_rec(book:AddressBook, args:list):
 
 def del_email_in_rec(book:AddressBook, args:list):
     """
-    Видалити електронну пошту для запису AddressBook
-    Args:
+    Видалення електронної пошти із запису AddressBook 
+
+    Аргументи:
         book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію.
         user id (int): ID користувача в AddressBook
         email (Email): електронна пошта користувача 
@@ -181,9 +188,10 @@ def del_email_in_rec(book:AddressBook, args:list):
 def add_record(book:AddressBook, args:list):
     """
     Додавання нового запису в AddressBook
-    Args:
+
+    Аргументи:
         book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію.
-        name (Name): ім'я користувача 
+        name (Name): Ім'я користувача 
     """
     if len(args) ==1:
         book.add_record(Record(args[0], book))
@@ -193,11 +201,12 @@ def add_record(book:AddressBook, args:list):
 
 def edit_record(book:AddressBook, args:list):
     """
-    Редагувати ім'я у записі в AddressBook
-    Args:
-        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію.
+    Редагування ім'я у записі в AddressBook
+
+    Аргументи:
+        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію
         user id (int): ID користувача в AddressBook
-        name (Name): нове ім'я користувача 
+        name (Name): Нове ім'я користувача 
     """
     if len(args) ==2:
         if int(args[0]) in book.data:
@@ -210,9 +219,10 @@ def edit_record(book:AddressBook, args:list):
 
 def del_record(book:AddressBook, args:list):
     """
-    Видалити запис в AddressBook
-    Args:
-        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію.
+    Видалення запису в AddressBook
+
+    Аргументи:
+        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію
         user id (int): ID користувача в AddressBook
     """
     if len(args) ==1:
@@ -226,11 +236,12 @@ def del_record(book:AddressBook, args:list):
 
 def add_phone_in_rec(book:AddressBook, args:list):
     """
-    Додати телефон до запису в AddressBook
-    Args:
-        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію.
+    Додавання телефон до запису в AddressBook
+
+    Аргументи:
+        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію
         user id (int): ID користувача в AddressBook
-        phone (str): номер телефону для додавання
+        phone (str): Номер телефону для додавання
     """
     if len(args) ==2:
         try:
@@ -249,12 +260,13 @@ def add_phone_in_rec(book:AddressBook, args:list):
 
 def edit_phone_in_rec(book:AddressBook, args:list):
     """
-    Замінити старий телефон на новий запис в AddressBook
-    Args:
-        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію.
+    Заміна номеру телефону на новий в AddressBook
+
+    Аргументи:
+        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію
         user id (int): ID користувача в AddressBook
-        old phone (str): номер телефону для зміни
-        new phone (str): новий номер телефону
+        old phone (str): Номер телефону для зміни
+        new phone (str): Новий номер телефону
     """
     if len(args) ==3:
         try:
@@ -274,11 +286,12 @@ def edit_phone_in_rec(book:AddressBook, args:list):
 
 def del_phone_in_rec(book:AddressBook, args:list):
     """
-    Видалити телефон з запису в AddressBook
-    Args:
-        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію.
+    Видалення номеру телефону із запису в AddressBook
+
+    Аргументи:
+        book (AddressBook): Екземпляр AddressBook, що містить контактну інформацію
         user id (int): ID користувача в AddressBook
-        phone (str): номер телефону для видалення
+        phone (str): Номер телефону для видалення
     """
     if len(args) ==2:
         try:
@@ -294,9 +307,10 @@ def del_phone_in_rec(book:AddressBook, args:list):
 
 def find_in_records(book:AddressBook, args:list):
     """
-    Пошук в AddressBook
-    Args:
-        search string (str): рядок для пошуку в полях адресної книги: Name, Adress, Phones, Emails, Birthday
+    Пошук записів в AddressBook
+
+    Аргументи:
+        search string (str): Рядок для пошуку в полях адресної книги: Name, Adress, Phones, Emails, Birthday
     """
     if len(args) ==1 and len(args[0]) > 1:
         count = 0

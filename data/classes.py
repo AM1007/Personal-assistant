@@ -2,10 +2,28 @@ from collections import UserDict
 import re
 import datetime
 import pickle
-from record import Record
 
-# Обробка випадку, коли номер телефону не знайдено у записі
+# Обробка помилки телефонного номеру, довжина якого не дорівнює Phone.MAX_PHONE_LEN length
+class LenPhoneError(Exception):
+    pass
+
+# обробка помилки телефону який містить не цифрові символи
+class TypePhoneError(Exception):
+    pass
+
+# обробка помилки яка з'являтиметься якщо запис про телефон відсутній
 class PhoneNotFindError(Exception):
+    pass
+
+# обробка помилки яка з'являтиметься якщо запис відсутній в адресній книзі
+class RecordNotFindError(Exception):
+    pass
+
+# обробка помилки яка з'являтиметься в разі вводу невірного формату даних
+class DateFormatError(Exception):
+    pass
+
+class TypeEmailError(Exception):
     pass
 
 class Field:
@@ -40,85 +58,193 @@ class Email(Field):
     def __init__(self, value):
         self.value = value
 
+class Record:
+    def __init__(self, name, book, birthday=None):
+        self.user_id = book.user_id_counter
+        self.name = Name(name)
+        self.phones = []
+        self.emails = []
+        self.birthday = birthday
+        self.address = ''
+
+    # Додавання електронної пошти до запису
+    def add_email(self, email):
+        filteredemail = re.findall(r"[A-Za-z,0-9]{1}[a-z,A-Z,.,_,0-9]{0,}@[a-zA-Z]+[.]{1}[a-z,A-Z,.]{2,}", email)
+        if len(filteredemail) > 0 and email[-1] not in ['.',',','/','\\']:
+            new_email = True
+            for e in self.emails:
+                if e.value == filteredemail[0]:
+                    new_email = False
+            if new_email:
+                self.emails.append(Email(filteredemail[0]))
+                return True
+        else:
+            raise TypeEmailError
+
+    # Видалення електронної пошти із запису
+    def remove_email(self, email):
+        find_email = False
+        for e in self.emails:
+            if e.value == email:
+                find_email = True
+                email_to_remove = e
+        if find_email:
+            self.emails.remove(email_to_remove)
+        else:
+            raise PhoneNotFindError
+
+    # Редагування електронної пошти в записі
+    def edit_email(self, email_old, email_new):
+        find_email = False
+        for e in self.emails:
+            if e.value == email_old:
+                find_email = True
+                email_to_remove = e
+        if find_email:
+            if self.add_email(email_new):
+                self.emails.remove(email_to_remove)
+        else:
+            raise PhoneNotFindError
+
+
+    # Додавання телефоного номеру до запису
+    def add_phone(self, phone):
+        if len(phone) != Phone.MAX_PHONE_LEN:
+            raise LenPhoneError
+        elif not phone.isdigit():
+            raise TypePhoneError
+        else:
+            new_phone = True
+            for p in self.phones:
+                if p.value == phone:
+                    new_phone = False
+            if new_phone:
+                self.phones.append(Phone(phone))
+        
+    # Видалення телефоного номеру від запису
+    def remove_phone(self, phone):
+        find_phone = False
+        for p in self.phones:
+            if p.value == phone:
+                find_phone = True
+                phone_to_remove = p
+        if find_phone:
+            self.phones.remove(phone_to_remove)
+        else:
+            raise PhoneNotFindError
+
+    # Заміна одного телефонного номера на інший
+    def edit_phone(self, phone_old, phone_new):
+        if len(phone_new) != Phone.MAX_PHONE_LEN:
+            raise LenPhoneError
+        elif not phone_new.isdigit():
+            raise TypePhoneError
+        else:
+            sucsess = False
+            for phone in self.phones:
+                if phone.value == phone_old:
+                    phone.value = phone_new
+                    sucsess = True
+            if not sucsess:
+                raise PhoneNotFindError
+
+    # Створення рядку для використання його для пошуку
+    def searchstring(self):
+        phones_line = f"{' '.join(p.value for p in self.phones)}" if self.phones else ""
+        birthday_line = f"{self.birthday.__str__()}" if self.birthday else ""
+        emails_line = f"{' '.join(p.value for p in self.emails)}" if self.emails else ""
+        address_line = f"{self.address}" if self.address else ""
+        res = f"{self.user_id} {self.name.value} " + phones_line + birthday_line + emails_line + address_line
+        return res.lower()
+
+    def __str__(self):
+        phones_line = f"; phones: {', '.join(p.value for p in self.phones)}" if self.phones else ""
+        birthday_line = f"; birthday: {self.birthday.__str__()}" if self.birthday else ""
+        emails_line = f"; emails: {', '.join(p.value for p in self.emails)}" if self.emails else ""
+        address_line = f"; adress: {self.address}" if self.address else ""
+        res = f"Contact id: {self.user_id}, name: {self.name.value}" + phones_line + birthday_line + emails_line + address_line
+        return res
 
 class AddressBook(UserDict):
     def __init__(self):
         """
-        Ініціалізія AddressBook із лічильником ID користувачів та словником даних.
+        Ініціалізія AddressBook із лічильником ID користувачів та словником даних
         """
         self.user_id_counter = 0
         self.data: dict[int, Record] = UserDict()
 
-    # Завантажити адресну книгу з файлу
+    # Завантаження Адресної Книги з файлу
     def read_from_file(self):
         """
-        Зчитатування даних з файлу та повернення екземпляру AddressBook.
+        Зчитатування даних з файлу та повернення екземпляру AddressBook
         """
         with open('data\\abook.dat', 'rb') as fh:
             return pickle.load(fh)
 
-    # Зберегти адресну книгу у файл
+    # Зберегти Адресної Книги у файл
     def save_to_file(self):
         """
-        Збереження екземпляру AddressBook у файл.
+        Збереження екземпляру AddressBook у файл
         """
         with open('data\\abook.dat', 'wb') as fh:
             pickle.dump(self, fh)
     
     def add_record(self, record: Record):
         """
-        Додавання нового запису до AddressBook.
+        Додавання нового запису до AddressBook
 
         Args:
-            record: Запис, який потрібно додати до AddressBook.
+            record: Запис, який потрібно додати до AddressBook
         """
         self.data[self.user_id_counter] = record
         self.user_id_counter += 1
     
     def edit_record(self, args):
         """
-        Редагування ім'я запису в AddressBook.
+        Редагування ім'я запису в AddressBook
+
         Args:
-            args (list): Список, що містить ID запису та нове ім'я.
+            args (list): Список, що містить ID запису та нове ім'я
         """
         self.data[int(args[0])].name = Name(args[1])
 
     def del_record(self, args):
         """
-        Видалення запису з AddressBook.
+        Видалення запису з AddressBook
 
         Args:
-            args (list): Список, що містить ID запису, який потрібно видалити.
+            args (list): Список, що містить ID запису, який потрібно видалити
         """
         self.data.pop(int(args[0]))
 
     def add_phone(self, args):
         """
-        Додавання номеру телефона контакту
+        Додавання телефонного номеру контакту
         """
         self.data[int(args[0])].add_phone(args[1])
 
     def edit_phone(self, args):
         """
-        Зміна номеру телефона контакту
+        Заміна телефонного номеру контакту
         """
         self.data[int(args[0])].edit_phone(args[1], args[1])   
 
     def del_phone(self, args):
         """
-        Видалення номеру телефона контакту
+        Видалення телефонного номеру контакту
         """
         self.data[int(args[0])].remove_phone(args[1])   
 
-# class нотатки користувача
+
+# class Нотатки користувача
 class Note:
     def __init__(self, nbook, content):
         """
         Ініціалізація об'єкта Note з контентом, тегами та датою створення.
 
         Args:
-            content (str): Зміст нотатки.
-            tags (list): Список тегів, пов'язаних із нотаткою.
+            content (str): Зміст нотатки
+            tags (list): Список тегів, пов'язаних із нотаткою
         """
         self.note_id = nbook.note_id_counter
         self.content = content
@@ -133,7 +259,7 @@ class Note:
         if new_tag:
             self.tags.append(tag)
     
-    # Видалити тег з запису
+    # Видалення тегу із запису
     def remove_tag(self, tag):
         find_tag = False
         for t in self.tags:
@@ -162,7 +288,7 @@ class Note:
 class NoteBook(UserDict):
     def __init__(self):
         """
-        Ініціалізація блокнота з лічильником ID користувача та словником даних.
+        Ініціалізація Блокнота з лічильником ID користувача та словником даних.
         """
         self.note_id_counter = 0
         self.data = UserDict()
@@ -171,7 +297,8 @@ class NoteBook(UserDict):
 
     def add_record(self,note):
         """
-        Додавання нової нотатки до блокнота.
+        Додавання нової нотатки до Блокнота.
+
             Args:
             note: Запис, який потрібно додати до блокнота.
         """
@@ -181,7 +308,7 @@ class NoteBook(UserDict):
 
     def read_from_file(self):
         """
-        Зчитування даних з файлу та повернення екземпляра Адресної книги.
+        Зчитування даних з файлу та повернення екземпляра Адресної Книги.
         """
         with open('data\\nbook.dat', 'rb') as fh:
             return pickle.load(fh)
@@ -189,7 +316,7 @@ class NoteBook(UserDict):
 
     def save_to_file(self):
         """
-        Збереження екземпляра блокнота у файл.
+        Збереження екземпляра Блокнота у файл.
         """
         with open('data\\nbook.dat', 'wb') as fh:
             pickle.dump(self, fh)
@@ -197,7 +324,8 @@ class NoteBook(UserDict):
 
     def edit_record(self, args):
         """
-        Редагування імені запису в Адресній книзі.
+        Редагування імені запису в Адресній Книзі.
+
             Args:
             args (list): Список, що містить ID запису та нове ім'я.
         """
@@ -206,7 +334,8 @@ class NoteBook(UserDict):
 
     def del_note(self, args):
         """
-        Видалення нотатки з блокнота.
+        Видалення нотатки з Блокнота.
+
             Args:
             args (list): Список, що містить ID запису для видалення.
         """

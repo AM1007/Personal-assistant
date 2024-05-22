@@ -2,9 +2,10 @@ from data.classes import NoteBook, Note, PhoneNotFindError
 
 def add_note(nbook: NoteBook, args:list):
     """
-    Створити новий запис у нотатнику
+    Створення нового запису в Блокноті
+
     Аргументи:
-        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про нотатки.
+        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про нотатки
         Note (str): Нотатка
     """
     if len(args) >=1:
@@ -15,11 +16,12 @@ def add_note(nbook: NoteBook, args:list):
 
 def edit_note(nbook: NoteBook, args:list):
     """
-    Редагувати нотатку в нотатнику
+    Редагування нотатки в Блокноті
+
     Аргументи:
-        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про нотатки.
-        note id (int): ID нотатки в нотатнику
-        Note (str): новий текст нотатки 
+        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про нотатки
+        note id (int): ID нотатки в Блокноті
+        Note (str): новий текст Блокноті 
     """
     if len(args) >=2:
         if int(args[0]) in nbook.data:
@@ -32,9 +34,10 @@ def edit_note(nbook: NoteBook, args:list):
 
 def del_note(nbook: NoteBook, args: list):
     """
-    Видалити нотатку в нотатнику
+    Видалення нотатки із Блокноту
+
     Аргументи:
-        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про нотатки.
+        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про нотатки
         note id (int): ID нотатки в нотатнику
     """
     if len(args) ==1:
@@ -47,10 +50,11 @@ def del_note(nbook: NoteBook, args: list):
         print('Error: Invalid command format.')
 def add_tag(nbook: NoteBook, args:list):
     """
-    Додати тег для запису з ідентифікатором note_id в Книзі Нотаток
-    Args:
-        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про контакти.
-        note_id (int): Ідентифікатор нотатки у Книзі Нотаток.
+    Додання тегу до запису з ідентифікатором note_id в Блокнот
+
+    Аргументи:
+        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про контакти
+        note_id (int): Ідентифікатор нотатки в Блокноті.
         tag (str): Тег для нотатки.
     """
     if len(args) ==2:
@@ -65,11 +69,12 @@ def add_tag(nbook: NoteBook, args:list):
 
 def del_tag(nbook: NoteBook, args:list):
     """
-    Видалити тег для запису з ідентифікатором note_id з Книги Нотаток
-    Args:
-        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про контакти.
-        note_id (int): Ідентифікатор нотатки у Книзі Нотаток.
-        tag (str): Тег для видалення.
+    Видалення тегу із запису з ідентифікатором note_id з Блокноту
+
+    Аргументи:
+        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про контакти
+        note_id (int): Ідентифікатор нотатки в Блокноті
+        tag (str): Тег для видалення
     """
     if len(args) ==2:
         try:
@@ -85,10 +90,11 @@ def del_tag(nbook: NoteBook, args:list):
 
 def find_in_notes(nbook: NoteBook, args:list):
     """
-    Пошук нотаток та тегів у Книзі Нотаток
-    Args:
-        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про контакти.
-        search_string (str): Рядок для пошуку. Має містити принаймні 2 символи.
+    Пошук нотаток та тегів в Блокноті
+
+    Аргументи:
+        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про контакти
+        search_string (str): Рядок для пошуку. Має містити принаймні 2 символи
     """
     if len(args) ==1 and len(args[0]) > 1:
         count = 0
@@ -103,10 +109,11 @@ def find_in_notes(nbook: NoteBook, args:list):
 
 def find_in_tags(nbook: NoteBook, args:list):
     """
-    Пошук тегів у Книзі Нотаток
+    Пошук тегів у Блокноті
+
     Args:
-        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про контакти.
-        search_string (str): Рядок для пошуку. Має містити принаймні 2 символи.
+        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про контакти
+        search_string (str): Рядок для пошуку. Має містити принаймні 2 символи
     """
     if len(args) ==1 and len(args[0]) > 1:
         count = 0
@@ -122,8 +129,9 @@ def find_in_tags(nbook: NoteBook, args:list):
 def sort_by_tags(nbook: NoteBook, args:list):
     """
     Вивести всі нотатки, відсортовані за кількістю тегів
-    Args:
-        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про контакти.
+
+    Аргументи:
+        nbook (NoteBook): Екземпляр NoteBook, що містить інформацію про контакти
     """
     if len(args) == 0:
         #print(nbook.data.values)
