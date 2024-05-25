@@ -1,5 +1,5 @@
 import datetime
-from data.classes import AddressBook, Birthday, DateFormatError, TypeEmailError, RecordNotFindError, PhoneNotFindError, Record, LenPhoneError, TypePhoneError
+from .classes import AddressBook, Birthday, DateFormatError, TypeEmailError, RecordNotFindError, PhoneNotFindError, Record, LenPhoneError, TypePhoneError
 
 def upcoming_birthdays(book, args):
     """

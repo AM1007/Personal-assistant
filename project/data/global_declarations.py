@@ -1,6 +1,6 @@
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
-from data.classes import AddressBook, NoteBook
+from .classes import AddressBook, NoteBook
 
 # Встановіть зоввнішню залежність: pip install prompt_toolkit
 commands = WordCompleter([

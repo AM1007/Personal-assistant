@@ -1,4 +1,4 @@
-from data.classes import NoteBook, Note, PhoneNotFindError
+from .classes import NoteBook, Note, PhoneNotFindError
 
 def add_note(nbook: NoteBook, args:list):
     """
