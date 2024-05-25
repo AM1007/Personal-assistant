@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name='simon-bot',
-    version='0.2',
+    version='0.3',
     packages=find_packages(),
     install_requires=[
         'prompt_toolkit'
