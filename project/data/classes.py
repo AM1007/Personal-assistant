@@ -2,6 +2,7 @@ from collections import UserDict
 import re
 import datetime
 import pickle
+import os
 
 # Обробка помилки телефонного номеру, довжина якого не дорівнює Phone.MAX_PHONE_LEN length
 class LenPhoneError(Exception):
@@ -166,6 +167,9 @@ class Record:
         return res
 
 class AddressBook(UserDict):
+    # Визначимо атрибут data_folder усередині класу
+    data_folder = os.path.dirname(os.path.dirname(__file__))
+
     def __init__(self):
         """
         Ініціалізія AddressBook із лічильником ID користувачів та словником даних
@@ -178,7 +182,8 @@ class AddressBook(UserDict):
         """
         Зчитатування даних з файлу та повернення екземпляру AddressBook
         """
-        with open('data\\abook.dat', 'rb') as fh:
+        file_path = os.path.join(AddressBook.data_folder, 'abook.dat')
+        with open(file_path, 'rb') as fh:
             return pickle.load(fh)
 
     # Зберегти Адресної Книги у файл
@@ -186,7 +191,8 @@ class AddressBook(UserDict):
         """
         Збереження екземпляру AddressBook у файл
         """
-        with open('data\\abook.dat', 'wb') as fh:
+        file_path = os.path.join(AddressBook.data_folder, 'abook.dat')
+        with open(file_path, 'wb') as fh:
             pickle.dump(self, fh)
     
     def add_record(self, record: Record):
@@ -286,6 +292,9 @@ class Note:
     # NoteBook class
     
 class NoteBook(UserDict):
+    # Визначимо атрибут data_folder усередині класу
+    data_folder = os.path.dirname(os.path.dirname(__file__))
+
     def __init__(self):
         """
         Ініціалізація Блокнота з лічильником ID користувача та словником даних.
@@ -310,7 +319,8 @@ class NoteBook(UserDict):
         """
         Зчитування даних з файлу та повернення екземпляра Адресної Книги.
         """
-        with open('data\\nbook.dat', 'rb') as fh:
+        file_path = os.path.join(NoteBook.data_folder, 'nbook.dat')
+        with open(file_path, 'rb') as fh:
             return pickle.load(fh)
 
 
@@ -318,7 +328,8 @@ class NoteBook(UserDict):
         """
         Збереження екземпляра Блокнота у файл.
         """
-        with open('data\\nbook.dat', 'wb') as fh:
+        file_path = os.path.join(NoteBook.data_folder, 'nbook.dat')
+        with open(file_path, 'wb') as fh:
             pickle.dump(self, fh)
 
 
