@@ -1,3 +1,5 @@
+![Preview](./assets/saimon-in-work.jpg)
+
 # Simon-Bot
 
 Simon-Bot це застосунок, який надає функціонал для керування адресною книгою та ведення нотаток. Застосунок дозволяє створювати, редагувати та видаляти записи контактів, додавати і видаляти номери телефонів та електронні адреси, керувати днями народження та адресами, а також здійснювати пошук записів за різними критеріями. Крім того, ви можете створювати та керувати нотатками, шукати нотатки за тегами та переглядати всі нотатки, відсортовані за датою.
@@ -77,16 +79,16 @@ Simon-Bot це застосунок, який надає функціонал д
 ## Development team
 
 - [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AM1007)
-  Андрій Мотько **Team Lead** Розробка додатку, код-рев'ю
+  Андрій Мотько **Team Lead** - розробка додатку, код-рев'ю
 
 - [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/SvitlanaSavchenko)
-  Світлана Савченко **Scrum Master** розробка додатку
+  Світлана Савченко **Scrum Master** - розробка додатку
 
 - [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Vademandr)
-  Вадім Андрющенко **Front End Developer** розробка додатку
+  Вадім Андрющенко **Front End Developer** - розробка додатку
 
 - [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/TiZorii)
-  Тетяна Зорій **Front End Developer** розробка додатку
+  Тетяна Зорій **Front End Developer** - розробка додатку
 
 - [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/andrei-81)
-  Андрій Гордійчук **Front End Developer** розробка додатку
+  Андрій Гордійчук **Front End Developer** - розробка додатку
